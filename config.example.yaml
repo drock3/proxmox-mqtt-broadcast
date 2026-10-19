@@ -1,0 +1,53 @@
+# node: "stefano"                  # auto-detected from hostname if omitted
+
+mqtt:
+  host: "192.168.1.x"              # HA / MQTT broker IP
+  port: 1883
+  username: ""
+  password: ""
+  client_id: "proxmox-broadcast"
+  topic_prefix: "proxmox"          # state published under proxmox/{node}/...
+  discovery_prefix: "homeassistant" # HA MQTT discovery prefix
+  # tls:                            # optional — omit entire block for plaintext
+  #   enabled: true
+  #   ca_certs: "/etc/ssl/certs/ca-certificates.crt"
+  #   certfile: null                # client cert (mutual TLS)
+  #   keyfile: null                 # client key  (mutual TLS)
+  #   insecure: false               # skip server certificate verification
+
+poll_interval: 60                   # seconds between poll cycles
+
+# Enable / disable metric categories (all default to true).
+# enabled:
+#   guests: true                   # QEMU VMs and LXC containers
+#   zfs: true                      # ZFS pool usage and health
+#   storage: true                  # Proxmox storage (pvesm)
+#   temperatures: true             # CPU / board thermal zones
+#   fans: true                     # Fan RPMs from hwmon
+#   network: true                  # Per-interface RX/TX throughput
+#   disk_io: true                  # Per-disk read/write throughput
+#   disks: true                    # Physical disk temp, SMART health, model/serial
+#   gpus: true                     # GPU stats (Intel, AMD, NVIDIA)
+#   updates: true                  # Pending apt updates & reboot required (zero I/O)
+
+# storage: true                    # (legacy) same as enabled.storage; default true
+
+# guests and zfs_pools are auto-discovered when omitted.
+# Uncomment and list specific items to limit what gets broadcast.
+#
+# guests:
+#   - vmid: 103
+#     type: qemu
+#     name: HAOS
+#   - vmid: 102
+#     type: lxc
+#     name: Plex
+#   - vmid: 104
+#     type: lxc
+#     name: Romm
+#   - vmid: 105
+#     type: lxc
+#     name: Frigate
+#
+# zfs_pools:
+#   - big_slow

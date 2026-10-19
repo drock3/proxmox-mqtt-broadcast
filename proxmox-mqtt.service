@@ -1,0 +1,38 @@
+[Unit]
+Description=Proxmox MQTT Bridge for Home Assistant
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/opt/proxmox-mqtt/venv/bin/python -m proxmox_mqtt /etc/proxmox-mqtt/config.yaml
+WorkingDirectory=/opt/proxmox-mqtt
+Restart=on-failure
+RestartSec=10
+
+# Run as dedicated service user
+#User=proxmox-mqtt
+#Group=proxmox-mqtt
+#SupplementaryGroups=www-data video render
+
+# Hardening
+NoNewPrivileges=yes
+AmbientCapabilities=CAP_PERFMON
+CapabilityBoundingSet=CAP_PERFMON
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+
+# Read-only access to paths the service needs
+ReadOnlyPaths=/proc /sys /etc/pve /run
+ReadWritePaths=/opt/proxmox-mqtt
+
+# Allow smartctl, zpool, pvesm, lspci, lsblk, nvidia-smi
+# CAP_SYS_ADMIN needed for NVMe SMART via smartctl (ioctl admin commands)
+CapabilityBoundingSet=CAP_SYS_RAWIO CAP_SYS_ADMIN
+
+[Install]
+WantedBy=multi-user.target
